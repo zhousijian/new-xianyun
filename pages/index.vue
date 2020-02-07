@@ -84,7 +84,7 @@ export default {
     height: 750px;
   }
   /deep/ .el-carousel__container {
-    height: 700px;
+    height: 750px;
   }
 
   .banner-image {
