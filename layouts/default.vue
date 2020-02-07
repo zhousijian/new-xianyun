@@ -1,52 +1,44 @@
 <template>
   <div>
     <Header></Header>
-    <!-- 内容占位组件 -->
-    <!-- 相当于router-link -->
+    <!-- 作用就是router-view，页面的占位符 -->
     <nuxt />
     <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Header from '@/components/header'
-import Footer from '@/components/footer'
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 
 export default {
-  components : {
-    Header,Footer
+  components: {
+    Header,
+    Footer
   }
-}
+};
 </script>
 
-<style lang="less" scoped>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+<style lang="less">
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
-
-*{
-  margin:0; 
-  padding:0;
+ul,
+li,
+ol {
+  list-style: none;
 }
-ul, li, ol{
-  list-style:none;
+a {
+  color: inherit;
+  text-decoration: none;
 }
-a{
-  text-decoration:none;
-  color:inherit;
+a:hover {
+  color: inherit;
 }
-a:hover{
-  color:inherit;
-}
-em,i{
+i,
+em {
   font-style: normal;
 }
 </style>
