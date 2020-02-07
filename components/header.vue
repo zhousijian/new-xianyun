@@ -13,7 +13,18 @@
         </div>
 
         <div class="right">
-          <nuxt-link to="/user/login">登录 / 注册</nuxt-link>
+          <el-dropdown v-if="token">
+            <span class="el-dropdown-link">
+              下拉菜单
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>黄金糕</el-dropdown-item>
+              <el-dropdown-item>狮子头</el-dropdown-item>
+              <el-dropdown-item>螺蛳粉</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <nuxt-link to="/user/login" v-else>登录 / 注册</nuxt-link>
         </div>
       </el-row>
     </header>
@@ -29,8 +40,12 @@ export default {
         { text: "旅游攻略", url: "/post" },
         { text: "酒店", url: "/hotel" },
         { text: "国内机票", url: "/air" }
-      ]
+      ],
+      token : ''
     };
+  },
+  mounted () {
+    this.token = localStorage.getItem('token')
   }
 };
 </script>
