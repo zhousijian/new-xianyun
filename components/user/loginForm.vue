@@ -31,7 +31,29 @@ export default {
   },
   methods: {
     submitForm() {
-      console.log(this.userInfo);
+      //   console.log(this.userInfo);
+      // this.$axios({
+      //     method : 'post',
+      //     url : '/accounts/login',
+      //     data : this.userInfo
+      // }).then(res=>{
+      //     // console.log(res);
+      //     通过commit调用mutations中的方法
+      //     this.$store.commit('user/setUserInfo',res.data)
+      // })
+      // el-form都有一个validate的方法用于验证的
+      this.$refs.ruleForm.validate(valid => {
+          // 参数也是返回值，结果是true或false
+        if (valid) {
+          // 通过commit调用actions中的方法
+          this.$store.dispatch("user/login", this.userInfo).then(() => {
+            this.$message.success("登录成功");
+            this.$router.push("/");
+          });
+        } else {
+          this.$message.error("请正确输入账号或密码");
+        }
+      });
     }
   }
 };
