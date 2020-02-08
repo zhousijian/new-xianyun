@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between" align="middle" class="content">
         <div class="left">
           <el-row type="flex" justify="space-between" align="middle">
-            <img src="logo.jpg" width="156px" height="43px" alt />
+            <img src="/logo.jpg" width="156px" height="43px" alt />
             <nuxt-link :to="item.url" v-for="(item,index) in arr" :key="index">{{item.text}}</nuxt-link>
             <!-- <nuxt-link to="/post">旅游攻略</nuxt-link>
           <nuxt-link to="/hotel">酒店</nuxt-link>
@@ -13,15 +13,17 @@
         </div>
 
         <div class="right">
-          <el-dropdown v-if="token">
+          <el-dropdown v-if="$store.state.user.userInfo.token">
+            <el-row type="flex" align="middle" class="el-dropdown-link">
+            <img :src="$axios.defaults.baseURL+$store.state.user.userInfo.user.defaultAvatar" alt="" width="36px" height="36px">
             <span class="el-dropdown-link">
-              下拉菜单
+              {{$store.state.user.userInfo.user.nickname}}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
+            </el-row>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-              <el-dropdown-item>螺蛳粉</el-dropdown-item>
+              <el-dropdown-item>个人中心</el-dropdown-item>
+              <el-dropdown-item>退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <nuxt-link to="/user/login" v-else>登录 / 注册</nuxt-link>
@@ -41,11 +43,7 @@ export default {
         { text: "酒店", url: "/hotel" },
         { text: "国内机票", url: "/air" }
       ],
-      token : ''
     };
-  },
-  mounted () {
-    this.token = localStorage.getItem('token')
   }
 };
 </script>
