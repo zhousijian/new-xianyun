@@ -4,8 +4,8 @@
       <el-input placeholder="用户手机" v-model="form.username"></el-input>
     </el-form-item>
 
-    <el-form-item class="form-item" prop="register">
-      <el-input placeholder="验证码" v-model="form.register">
+    <el-form-item class="form-item" prop="captcha">
+      <el-input placeholder="验证码" v-model="form.captcha">
         <template slot="append">
           <el-button @click="handleSendCaptcha">发送验证码</el-button>
         </template>
@@ -31,12 +31,12 @@
 <script>
 export default {
   data() {
-    var validateUserName = (rule, value, callback) =>{
-        if(/^1[3-9]\d{9}$/.test(value)){
-            callback()
-        }else {
-            callback('请输入正确手机号码')
-        }
+    var validateUserName = (rule, value, callback) => {
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback();
+      } else {
+        callback("请输入正确手机号码");
+      }
     };
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -61,7 +61,7 @@ export default {
       // 表单数据
       form: {
         username: "",
-        register: "",
+        captcha: "",
         nickname: "",
         password: "",
         checkpass: ""
@@ -69,9 +69,7 @@ export default {
       // 表单规则
       rules: {
         username: [{ validator: validateUserName, trigger: "blur" }],
-        register: [
-          { required: true, message: "请输入验证码", trigger: "blur" }
-        ],
+        captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
         nickname: [{ required: true, message: "请输入昵称", trigger: "blur" }],
         password: [{ validator: validatePass, trigger: "blur" }],
         checkpass: [{ validator: validatePass2, trigger: "blur" }]
@@ -81,16 +79,28 @@ export default {
   methods: {
     // 发送验证码
     handleSendCaptcha() {
-        this.$store.dispatch('user/captchas',{tel : this.form.username}).then(res=>{
-            // console.log(res);
-            this.$message.success('验证码是:'+res.data.code)
-            this.form.register = res.data.code
-        })
+      this.$store
+        .dispatch("user/captchas", { tel: this.form.username })
+        .then(res => {
+          // console.log(res);
+          this.$message.success("验证码是:" + res.data.code);
+          this.form.captcha = res.data.code;
+        });
     },
 
     // 注册
     handleRegSubmit() {
-      console.log(this.form);
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          //console.log(this.form);
+          const { checkpass, ...data } = this.form;
+          // console.log(data);
+          this.$store.dispatch("user/registerUser", data).then(()=>{
+              this.$message.success('注册成功')
+              this.$router.push('/')
+          })
+        }
+      });
     }
   }
 };

@@ -41,5 +41,17 @@ export const actions = {
         }).then(res=>{
             return res
         })
+    },
+    // 注册请求
+    registerUser(store,data){
+        return this.$axios({
+            method : 'post',
+            url : '/accounts/register',
+            data
+        }).then(res=>{
+            // console.log(res);
+            store.commit('setUserInfo', res.data)
+            
+        })
     }
 }
