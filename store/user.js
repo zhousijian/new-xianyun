@@ -21,6 +21,7 @@ export const mutations = {
 export const actions = {
     // 函数名自定义
     //第一个参数必须是store，第二个参数调用时候传入的参数
+    // 登录请求
     login(store,data){
         return this.$axios({
             method : 'post',
