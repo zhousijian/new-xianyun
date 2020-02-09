@@ -31,5 +31,15 @@ export const actions = {
             // console.log(res);
             store.commit('setUserInfo',res.data)
         })
+    },
+    // 发送验证码请求
+    captchas(store,data){
+        return this.$axios({
+            method : 'post',
+            url : '/captchas',
+            data
+        }).then(res=>{
+            return res
+        })
     }
 }

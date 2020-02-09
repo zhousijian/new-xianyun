@@ -80,7 +80,13 @@ export default {
   },
   methods: {
     // 发送验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+        this.$store.dispatch('user/captchas',{tel : this.form.username}).then(res=>{
+            // console.log(res);
+            this.$message.success('验证码是:'+res.data.code)
+            this.form.register = res.data.code
+        })
+    },
 
     // 注册
     handleRegSubmit() {
