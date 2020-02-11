@@ -32,6 +32,7 @@
           :fetch-suggestions="queryDestSearch"
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
+          @blur="searchDestCityBlur"
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
@@ -126,8 +127,20 @@ export default {
         this.form.destCode = item.sort
     },
 
+    // 到达城市搜索框的失焦默认选中第一项
+    searchDestCityBlur(){
+        if(this.departCitySearchInfo.length == 0){
+            return;
+        }
+        this.form.destCity = this.departCitySearchInfo[0].value
+        this.form.destCode = this.departCitySearchInfo[0].sort
+    },
+
     // 确认选择日期时触发
-    handleDate(value) {},
+    handleDate(value) {
+        // console.log(value);
+        
+    },
 
     // 触发和目标城市切换时触发
     handleReverse() {},
