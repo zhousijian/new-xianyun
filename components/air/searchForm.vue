@@ -38,7 +38,7 @@
       </el-form-item>
       <el-form-item label="出发时间">
         <!-- change 用户确认选择日期时触发 -->
-        <el-date-picker v-model="form.departDate" type="date" placeholder="请选择日期" style="width: 100%;" @change="handleDate"></el-date-picker>
+        <el-date-picker v-model="form.departDate" type="date" placeholder="请选择日期" style="width: 100%;" value-format="yyyy-MM-dd" @change="handleDate"></el-date-picker>
       </el-form-item>
       <el-form-item label>
         <el-button style="width:100%;" type="primary" icon="el-icon-search" @click="handleSubmit">搜索</el-button>
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+// 引入时间格式的插件
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -136,10 +138,12 @@ export default {
         this.form.destCode = this.departCitySearchInfo[0].sort
     },
 
+    // 如果element-ui没有可以改变时间格式的方法，就需要用到以下的方法修改时间格式
     // 确认选择日期时触发
     handleDate(value) {
         // console.log(value);
-        
+        // let searchDate = moment(value).format('YYYY-MM-DD')
+        // console.log(searchDate);
     },
 
     // 触发和目标城市切换时触发
