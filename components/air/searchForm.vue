@@ -92,7 +92,16 @@ export default {
   },
   methods: {
     // tab切换时触发
-    handleSearchTab(item, index) {},
+    handleSearchTab(item, index) {
+      // console.log(item);
+      // console.log(index);
+      if (index == 1) {
+        this.$alert("抱歉！目前只提供单程航班", "温馨提示", {
+          confirmButtonText: "确定",
+          type : 'warning'
+        });
+      }
+    },
 
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
@@ -178,19 +187,19 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           //   console.log(111);
-        //   this.$axios({
-        //     url: "/airs",
-        //     params: this.form
-        //   }).then(res => {
-        //     console.log(res);
-        // 跳转到 /air/flights，保证该页面url的参数有5个参数
-            this.$router.push({
-                path : '/air/flights',
-                query : this.form
-            })
-        //   });
-        }else {
-            this.$message.error('请规范输入信息')
+          //   this.$axios({
+          //     url: "/airs",
+          //     params: this.form
+          //   }).then(res => {
+          //     console.log(res);
+          // 跳转到 /air/flights，保证该页面url的参数有5个参数
+          this.$router.push({
+            path: "/air/flights",
+            query: this.form
+          });
+          //   });
+        } else {
+          this.$message.error("请规范输入信息");
         }
       });
     }
