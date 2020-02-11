@@ -1,6 +1,6 @@
 export const actions = {
     // 输入搜索城市名字请求
-    departCity(store, params) {
+    searchCity(store, params) {
         return this.$axios({
             url: '/airs/city',
             params

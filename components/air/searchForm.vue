@@ -80,7 +80,7 @@ export default {
         if(value == ''){
             return;
         }
-        this.$store.dispatch('air/departCity',{ name : value })
+        this.$store.dispatch('air/searchCity',{ name : value })
         .then(res=>{
             // console.log(res);
             this.departCitySearchInfo = res
@@ -109,11 +109,22 @@ export default {
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
-      cb([{ value: '1' }, { value: '2' }, { value: '3' }]);
+        if(value == ''){
+            return;
+        }
+        this.$store.dispatch('air/searchCity',{ name : value })
+        .then(res=>{
+            this.departCitySearchInfo = res
+            cb(res)
+        })
+    //   cb([{ value: '1' }, { value: '2' }, { value: '3' }]);
     },
 
     // 目标城市下拉选择时触发
-    handleDestSelect(item) {},
+    handleDestSelect(item) {
+        this.form.destCity = item.value
+        this.form.destCode = item.sort
+    },
 
     // 确认选择日期时触发
     handleDate(value) {},
