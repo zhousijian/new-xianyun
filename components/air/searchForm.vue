@@ -13,12 +13,12 @@
       </span>
     </el-row>
 
-    <el-form v-model="form" class="search-form-content" ref="form" label-width="80px">
-      <el-form-item label="出发城市">
+    <el-form :model="form" :rules="rules" class="search-form-content" ref="form" label-width="80px">
+      <el-form-item label="出发城市" prop="departCity">
         <!-- fetch-suggestions 返回输入建议的方法 -->
         <!-- select 点击选中建议项时触发 -->
         <el-autocomplete
-        v-model="form.departCity"
+          v-model="form.departCity"
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
           @select="handleDepartSelect"
@@ -26,9 +26,9 @@
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
-      <el-form-item label="到达城市">
+      <el-form-item label="到达城市" prop="destCity">
         <el-autocomplete
-        v-model="form.destCity"
+          v-model="form.destCity"
           :fetch-suggestions="queryDestSearch"
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
@@ -36,9 +36,16 @@
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
-      <el-form-item label="出发时间">
+      <el-form-item label="出发时间" prop="departDate">
         <!-- change 用户确认选择日期时触发 -->
-        <el-date-picker v-model="form.departDate" type="date" placeholder="请选择日期" style="width: 100%;" value-format="yyyy-MM-dd" @change="handleDate"></el-date-picker>
+        <el-date-picker
+          v-model="form.departDate"
+          type="date"
+          placeholder="请选择日期"
+          style="width: 100%;"
+          value-format="yyyy-MM-dd"
+          @change="handleDate"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item label>
         <el-button style="width:100%;" type="primary" icon="el-icon-search" @click="handleSubmit">搜索</el-button>
@@ -52,7 +59,7 @@
 
 <script>
 // 引入时间格式的插件
-import moment from 'moment'
+import moment from "moment";
 export default {
   data() {
     return {
@@ -68,8 +75,19 @@ export default {
         destCode: "",
         departDate: ""
       },
+      rules: {
+        departCity: [
+          { required: true, message: "请输入出发城市", trigger: "blur" }
+        ],
+        destCity: [
+          { required: true, message: "请输入到达城市", trigger: "blur" }
+        ],
+        departDate: [
+          { required: true, message: "请选择出发时间", trigger: "blur" }
+        ]
+      },
       // 出发城市搜索框请求回来的数据，以便使用
-      departCitySearchInfo : []
+      departCitySearchInfo: []
     };
   },
   methods: {
@@ -79,85 +97,102 @@ export default {
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDepartSearch(value, cb) {
-    //   console.log(value);
-        if(value == ''){
-            return;
-        }
-        this.$store.dispatch('air/searchCity',{ name : value })
-        .then(res=>{
-            // console.log(res);
-            this.departCitySearchInfo = res
-            cb(res)
-        })
-    //   cb([{ value: '1' }, { value: '2' }, { value: '3' }]);
+      //   console.log(value);
+      if (value == "") {
+        return;
+      }
+      this.$store.dispatch("air/searchCity", { name: value }).then(res => {
+        // console.log(res);
+        this.departCitySearchInfo = res;
+        cb(res);
+      });
+      //   cb([{ value: '1' }, { value: '2' }, { value: '3' }]);
     },
 
     // 出发城市下拉选择时触发
     handleDepartSelect(item) {
-        // console.log(item);
-        this.form.departCity = item.value
-        this.form.departCode = item.sort
+      // console.log(item);
+      this.form.departCity = item.value;
+      this.form.departCode = item.sort;
     },
 
     // 出发城市搜索框的失焦默认选中第一项
-    searchDepartCityBlur(){
-        // console.log(this.departCitySearchInfo);
-        if(this.departCitySearchInfo.length == 0){
-            return;
-        }
-        this.form.departCity = this.departCitySearchInfo[0].value
-        this.form.departCode = this.departCitySearchInfo[0].sort
+    searchDepartCityBlur() {
+      // console.log(this.departCitySearchInfo);
+      if (this.departCitySearchInfo.length == 0) {
+        return;
+      }
+      this.form.departCity = this.departCitySearchInfo[0].value;
+      this.form.departCode = this.departCitySearchInfo[0].sort;
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
-        if(value == ''){
-            return;
-        }
-        this.$store.dispatch('air/searchCity',{ name : value })
-        .then(res=>{
-            this.departCitySearchInfo = res
-            cb(res)
-        })
-    //   cb([{ value: '1' }, { value: '2' }, { value: '3' }]);
+      if (value == "") {
+        return;
+      }
+      this.$store.dispatch("air/searchCity", { name: value }).then(res => {
+        this.departCitySearchInfo = res;
+        cb(res);
+      });
+      //   cb([{ value: '1' }, { value: '2' }, { value: '3' }]);
     },
 
     // 目标城市下拉选择时触发
     handleDestSelect(item) {
-        this.form.destCity = item.value
-        this.form.destCode = item.sort
+      this.form.destCity = item.value;
+      this.form.destCode = item.sort;
     },
 
     // 到达城市搜索框的失焦默认选中第一项
-    searchDestCityBlur(){
-        if(this.departCitySearchInfo.length == 0){
-            return;
-        }
-        this.form.destCity = this.departCitySearchInfo[0].value
-        this.form.destCode = this.departCitySearchInfo[0].sort
+    searchDestCityBlur() {
+      if (this.departCitySearchInfo.length == 0) {
+        return;
+      }
+      this.form.destCity = this.departCitySearchInfo[0].value;
+      this.form.destCode = this.departCitySearchInfo[0].sort;
     },
 
     // 如果element-ui没有可以改变时间格式的方法，就需要用到以下的方法修改时间格式
     // 确认选择日期时触发
     handleDate(value) {
-        // console.log(value);
-        // let searchDate = moment(value).format('YYYY-MM-DD')
-        // console.log(searchDate);
+      // console.log(value);
+      // let searchDate = moment(value).format('YYYY-MM-DD')
+      // this.form.departDate = searchDate
+      // console.log(searchDate);
     },
 
     // 触发和目标城市切换时触发
     handleReverse() {
-        const { departCity,departCode,destCity,destCode } = this.form
-        this.form.departCity = destCity
-        this.form.departCode = destCode
-        this.form.destCity = departCity
-        this.form.destCode = departCode
+      const { departCity, departCode, destCity, destCode } = this.form;
+      this.form.departCity = destCity;
+      this.form.departCode = destCode;
+      this.form.destCity = departCity;
+      this.form.destCode = departCode;
     },
 
     // 提交表单是触发
     handleSubmit() {
-      console.log(this.form);
+      //   console.log(this.form);
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          //   console.log(111);
+        //   this.$axios({
+        //     url: "/airs",
+        //     params: this.form
+        //   }).then(res => {
+        //     console.log(res);
+        // 跳转到 /air/flights，保证该页面url的参数有5个参数
+            this.$router.push({
+                path : '/air/flights',
+                query : this.form
+            })
+        //   });
+        }else {
+            this.$message.error('请规范输入信息')
+        }
+      });
     }
   },
   mounted() {}
