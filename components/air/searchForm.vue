@@ -22,6 +22,7 @@
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
           @select="handleDepartSelect"
+          @blur="searchDepartCityBlur"
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
@@ -63,7 +64,9 @@ export default {
         destCity: "",
         destCode: "",
         departDate: ""
-      }
+      },
+      // 出发城市搜索框请求回来的数据，以便使用
+      departCitySearchInfo : []
     };
   },
   methods: {
@@ -80,6 +83,7 @@ export default {
         this.$store.dispatch('air/departCity',{ name : value })
         .then(res=>{
             // console.log(res);
+            this.departCitySearchInfo = res
             cb(res)
         })
     //   cb([{ value: '1' }, { value: '2' }, { value: '3' }]);
@@ -90,6 +94,16 @@ export default {
         // console.log(item);
         this.form.departCity = item.value
         this.form.departCode = item.sort
+    },
+
+    // 出发城市搜索框的失焦默认选中第一项
+    searchDepartCityBlur(){
+        // console.log(this.departCitySearchInfo);
+        if(this.departCitySearchInfo.length == 0){
+            return;
+        }
+        this.form.departCity = this.departCitySearchInfo[0].value
+        this.form.departCode = this.departCitySearchInfo[0].sort
     },
 
     // 目标城市输入框获得焦点时触发
