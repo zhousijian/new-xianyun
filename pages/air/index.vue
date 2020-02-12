@@ -8,7 +8,7 @@
     <!-- 搜索广告栏 -->
     <el-row type="flex" justify="space-between">
       <!-- 搜索表单 -->
-      <SearchForm></SearchForm>
+      <IndexSearchForm></IndexSearchForm>
 
       <!-- banner广告 -->
       <div class="sale-banner">
@@ -44,10 +44,10 @@
 
 <script>
 // 引入机票首页的form搜索框组件
-import SearchForm from '@/components/air/searchForm'
+import IndexSearchForm from '@/components/air/indexSearchForm'
 export default {
   components: {
-    SearchForm
+    IndexSearchForm
   }
 };
 </script>
