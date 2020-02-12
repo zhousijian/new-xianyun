@@ -13,7 +13,7 @@
               <span>{{data.org_airport_name}}{{data.org_airport_quay}}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
-              <span>2时20分</span>
+              <span>{{flightTime}}</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
               <strong>{{data.arr_time}}</strong>
@@ -60,9 +60,26 @@ export default {
   },
   data () {
     return {
-      isShow : false
+      isShow : false,
     }
-  }
+  },
+  computed: {
+    flightTime(){
+      // split是以什么符号把字符串切割分开，成为一个新数组
+      let endArr = this.data.arr_time.split(':')
+      let startArr = this.data.dep_time.split(':')
+      // 注意：获取到数组里的数据不是数字，要转换，可在变量前加+号，隐式转换，或者乘于，或者Number等方法
+      let allMinute = endArr[0]*60+endArr[1]*1-startArr[0]*60-startArr[1]*1
+      // 时间不能负数，需要添加一天时间
+      if(allMinute < 0){
+        allMinute += 24*60
+      }
+      let hour = Math.floor(allMinute/60)
+      let minute = allMinute % 60
+      let time = hour + '时' + minute + '分'
+      return time
+    }
+  },
 };
 </script>
 
