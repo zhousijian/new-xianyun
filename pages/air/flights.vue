@@ -57,27 +57,34 @@ export default {
     FlightsItem
   },
   mounted() {
+    // 请求机票列表数据
     // console.log(this.$route.query);
     this.$axios({
       url: "/airs",
       params: this.$route.query
     }).then(res => {
       // console.log(res);
+      // 修改总条数
       this.total = res.data.total;
+      // 总数据
       this.searchFlights = res.data;
     });
   },
   methods: {
+    // 切换条数时候触发的事件
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
       this.pageSize = val;
     },
+    // 切换页数时候触发的事件
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       this.pageIndex = val;
     }
   },
   computed: {
+    // 切割之后返回的数组（当前页面要展示的数组）
+    // 计算属性函数内部引用实例（this）的属性一旦发生了变化，函数会重新执行返回新的值
     onePageFlightInfo() {
       // 判断searchFlights有没有值
       if (!this.searchFlights.flights) {
