@@ -44,6 +44,7 @@
           placeholder="请选择日期"
           style="width: 100%;"
           value-format="yyyy-MM-dd"
+          :picker-options="banDate"
           @change="handleDate"
         ></el-date-picker>
       </el-form-item>
@@ -63,6 +64,11 @@ import moment from "moment";
 export default {
   data() {
     return {
+      banDate: {
+        disabledDate(time) {
+          return time.getTime()+3600*1000*24 < Date.now();
+        }
+      },
       tabs: [
         { icon: "iconfont icondancheng", name: "单程" },
         { icon: "iconfont iconshuangxiang", name: "往返" }
@@ -98,7 +104,7 @@ export default {
       if (index == 1) {
         this.$alert("抱歉！目前只提供单程航班", "温馨提示", {
           confirmButtonText: "确定",
-          type : 'warning'
+          type: "warning"
         });
       }
     },
@@ -106,10 +112,10 @@ export default {
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDepartSearch(value, cb) {
-        // console.log(value);
+      // console.log(value);
       if (value == "") {
-        this.departCitySearchInfo = []
-        cb([])
+        this.departCitySearchInfo = [];
+        cb([]);
         return;
       }
       this.$store.dispatch("air/searchCity", { name: value }).then(res => {
@@ -141,8 +147,8 @@ export default {
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
       if (value == "") {
-        this.departCitySearchInfo = []
-        cb([])
+        this.departCitySearchInfo = [];
+        cb([]);
         return;
       }
       this.$store.dispatch("air/searchCity", { name: value }).then(res => {
