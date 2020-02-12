@@ -77,13 +77,13 @@ export default {
       },
       rules: {
         departCity: [
-          { required: true, message: "请输入出发城市", trigger: "blur" }
+          { required: true, message: "请输入出发城市", trigger: "click" }
         ],
         destCity: [
-          { required: true, message: "请输入到达城市", trigger: "blur" }
+          { required: true, message: "请输入到达城市", trigger: "click" }
         ],
         departDate: [
-          { required: true, message: "请选择出发时间", trigger: "blur" }
+          { required: true, message: "请选择出发时间", trigger: "click" }
         ]
       },
       // 出发城市搜索框请求回来的数据，以便使用
@@ -106,8 +106,10 @@ export default {
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDepartSearch(value, cb) {
-      //   console.log(value);
+        // console.log(value);
       if (value == "") {
+        this.departCitySearchInfo = []
+        cb([])
         return;
       }
       this.$store.dispatch("air/searchCity", { name: value }).then(res => {
@@ -139,6 +141,8 @@ export default {
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
       if (value == "") {
+        this.departCitySearchInfo = []
+        cb([])
         return;
       }
       this.$store.dispatch("air/searchCity", { name: value }).then(res => {
@@ -198,9 +202,10 @@ export default {
             query: this.form
           });
           //   });
-        } else {
-          this.$message.error("请规范输入信息");
         }
+        //  else {
+        //   this.$message.error("请规范输入信息");
+        // }
       });
     }
   },
