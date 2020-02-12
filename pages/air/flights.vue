@@ -43,13 +43,13 @@ export default {
   data() {
     return {
       // 搜索到的所有航班信息
-      searchFlights: [],
+      searchFlights: {},
       // 当前的页数
-      pageIndex : 1,
+      pageIndex: 1,
       // 每页的航班信息条数
-      pageSize : 5,
+      pageSize: 5,
       // 航班信息的总条数
-      total : 10
+      total: 10
     };
   },
   components: {
@@ -63,24 +63,32 @@ export default {
       params: this.$route.query
     }).then(res => {
       // console.log(res);
-      this.total = res.data.total
-      this.searchFlights = res.data.flights;
+      this.total = res.data.total;
+      this.searchFlights = res.data;
     });
   },
   methods: {
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
-      this.pageSize = val
+      this.pageSize = val;
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      this.pageIndex = val
+      this.pageIndex = val;
     }
   },
   computed: {
-    onePageFlightInfo(){
-      let arr = this.searchFlights.slice((this.pageIndex-1)*this.pageSize,this.pageIndex*this.pageSize)
-      return arr
+    onePageFlightInfo() {
+      // 判断searchFlights有没有值
+      if (!this.searchFlights.flights) {
+        // 没有值返回一个空数组
+        return [];
+      }
+      let arr = this.searchFlights.flights.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      return arr;
     }
   }
 };
