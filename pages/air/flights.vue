@@ -12,7 +12,18 @@
 
         <!-- 航班信息 -->
         <!-- <div></div> -->
-        <FlightsItem v-for="(item,index) in searchFlights" :key="index" :data='item'></FlightsItem>
+        <FlightsItem v-for="(item,index) in onePageFlightInfo" :key="index" :data="item"></FlightsItem>
+
+        <!-- element-ui分页器 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageIndex"
+          :page-sizes="[5, 10, 15, 20]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        ></el-pagination>
       </div>
 
       <!-- 侧边栏 -->
@@ -25,28 +36,53 @@
 
 <script>
 // import moment from "moment";
-import FlightsHead from '@/components/air/flightsHead'
-import FlightsItem from '@/components/air/flightsItem'
+import FlightsHead from "@/components/air/flightsHead";
+import FlightsItem from "@/components/air/flightsItem";
 
 export default {
   data() {
     return {
-      searchFlights : {}
+      // 搜索到的所有航班信息
+      searchFlights: [],
+      // 当前的页数
+      pageIndex : 1,
+      // 每页的航班信息条数
+      pageSize : 5,
+      // 航班信息的总条数
+      total : 10
     };
   },
   components: {
-    FlightsHead,FlightsItem
+    FlightsHead,
+    FlightsItem
   },
-  mounted () {
+  mounted() {
     // console.log(this.$route.query);
     this.$axios({
-      url : '/airs',
-      params : this.$route.query
-    }).then(res=>{
+      url: "/airs",
+      params: this.$route.query
+    }).then(res => {
       // console.log(res);
-      this.searchFlights = res.data.flights
-    })
+      this.total = res.data.total
+      this.searchFlights = res.data.flights;
+    });
   },
+  methods: {
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.pageIndex = val
+    }
+  },
+  computed: {
+    onePageFlightInfo(){
+      let arr = this.searchFlights.slice((this.pageIndex-1)*this.pageSize,this.pageIndex*this.pageSize)
+      return arr
+    }
+  }
 };
 </script>
 
