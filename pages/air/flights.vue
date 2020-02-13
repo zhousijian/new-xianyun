@@ -5,7 +5,7 @@
       <div class="flights-content">
         <!-- 过滤条件 -->
         <!-- <div></div> -->
-        <FlightsFilters :data='searchFlights'></FlightsFilters>
+        <FlightsFilters :data="backupsearchFlights" @filterDate="filterDate"></FlightsFilters>
 
         <!-- 航班头部布局 -->
         <!-- <div></div> -->
@@ -42,18 +42,23 @@ import FlightsHead from "@/components/air/flightsHead";
 // 航班详情页的每一项信息
 import FlightsItem from "@/components/air/flightsItem";
 // 过滤条件选择部分
-import FlightsFilters from '@/components/air/flightsFilters'
+import FlightsFilters from "@/components/air/flightsFilters";
 
 export default {
   data() {
     return {
       // 搜索到的所有航班信息
       searchFlights: {
-        info : {},
-        flights : [],
-        options : {}
+        info: {},
+        flights: [],
+        options: {}
       },
-
+      // 备份一份搜索到的所有航班信息
+      backupsearchFlights: {
+        info: {},
+        flights: [],
+        options: {}
+      },
       // 当前的页数
       pageIndex: 1,
       // 每页的航班信息条数
@@ -79,6 +84,8 @@ export default {
       this.total = res.data.total;
       // 总数据
       this.searchFlights = res.data;
+      // 备份总数据
+      this.backupsearchFlights = {...res.data}
     });
   },
   methods: {
@@ -93,7 +100,11 @@ export default {
       this.pageIndex = val;
     },
     // 从flightsFilters.vue筛选回来的数据
-
+    filterDate(arr) {
+      // console.log(arr);
+      this.searchFlights.flights = arr;
+      this.total = arr.length;
+    }
   },
   computed: {
     // 切割之后返回的数组（当前页面要展示的数组）

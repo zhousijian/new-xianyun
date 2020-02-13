@@ -39,7 +39,12 @@
       </el-col>
       <el-col :span="4">
         <el-select size="mini" v-model="airSize" placeholder="机型" @change="handleAirSize">
-          <el-option :label="item.text" :value="item.size" v-for="(item,index) in airSizeList" :key="index"></el-option>
+          <el-option
+            :label="item.text"
+            :value="item.size"
+            v-for="(item,index) in airSizeList"
+            :key="index"
+          ></el-option>
         </el-select>
       </el-col>
     </el-row>
@@ -63,42 +68,64 @@ export default {
       airport: "", // 机场
       flightTimes: "", // 出发时间
       company: "", // 航空公司
-      airSize: '', // 机型大小
-      airSizeList : [{ text: "大", size: "L" },{ text: "中", size: "M" },{ text: "小", size: "S" }] //机型大小列表
+      airSize: "", // 机型大小
+      airSizeList: [
+        { text: "大", size: "L" },
+        { text: "中", size: "M" },
+        { text: "小", size: "S" }
+      ] //机型大小列表
     };
   },
   methods: {
     // 选择机场时候触发
-    handleAirport(value) {},
+    handleAirport(value) {
+      // filter筛选出满足条件的返回一个新的数组
+      let arr = this.data.flights.filter(v => {
+        return v.org_airport_name === value;
+      });
+      // 子传父，把筛选满足条件的新数组传给flights.vue组件，渲染
+      this.$emit("filterDate", arr);
+      // console.log(arr);
+    },
 
     // 选择出发时间时候触发
     handleFlightTimes(value) {
-      // console.log(value);
+      //   console.log(value);
+      let arr = this.data.flights.filter(v => {
+        // 时间范围
+        let scopeHour = value.split("-");
+        // console.log(scopeHour);
+        // 开始时间
+        let startHour = v.dep_time.split(":")[0];
+        // console.log(Number(scopeHour[1]));
+        return Number(scopeHour[0]) <= Number(startHour) && Number(startHour) < Number(scopeHour[1]);
+      });
+      // 子传父，把筛选满足条件的新数组传给flights.vue组件，渲染
+      this.$emit("filterDate", arr);
     },
 
     // 选择航空公司时候触发
     handleCompany(value) {
-        // console.log(value);
-        
-        // let arr = this.data.flights.filter(v=>{
-        //     return v.airline_name == value
-        // })
-        // console.log(arr);
-        
+      // console.log(value);
+
+      let arr = this.data.flights.filter(v => {
+        return v.airline_name == value;
+      });
+      // console.log(arr);
+      // 子传父，把筛选满足条件的新数组传给flights.vue组件，渲染
+      this.$emit("filterDate", arr);
     },
 
     // 选择机型时候触发
     handleAirSize(value) {
-        // console.log(value);
-        // 筛选出满足条件的返回一个新的数组
-        // console.log(this.data);
-        // let arr = this.data.flights.filter(v=>{
-        //     return v.plane_size === value
-        // })
-        // // 子传父，把筛选满足条件的新数组传给flights.vue组件，渲染
-        // this.$emit('filterDate',arr)
-        // console.log(arr);
-        
+      // console.log(value);
+      // filter筛选出满足条件的返回一个新的数组
+      let arr = this.data.flights.filter(v => {
+        return v.plane_size === value;
+      });
+      // 子传父，把筛选满足条件的新数组传给flights.vue组件，渲染
+      this.$emit("filterDate", arr);
+      // console.log(arr);
     },
 
     // 撤销条件时候触发

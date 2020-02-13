@@ -4,7 +4,7 @@
       <!-- 显示的机票信息 -->
       <el-row type="flex" align="middle" class="flight-info">
         <el-col :span="6">
-          <span>{{data.ariline_name}}</span> {{data.flight_no}}
+          <span>{{data.airline_name}}</span> {{data.flight_no}}
         </el-col>
         <el-col :span="12">
           <el-row type="flex" justify="space-between" class="flight-info-center">
