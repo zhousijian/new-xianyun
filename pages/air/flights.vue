@@ -71,7 +71,7 @@ export default {
     };
   },
   // 在当前路由改变，但是该组件被复用时调用(组件内调用导航守卫)
-  beforeRouteUpdate(to, from, next) {
+  // beforeRouteUpdate(to, from, next) {
     // 在当前路由改变，但是该组件被复用时调用
     // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
     // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
@@ -79,22 +79,17 @@ export default {
     // console.log(to);
     // console.log(from);
     // console.log(next);
-    // this.$axios({
-    //   url: "/airs",
-    //   params: to.query
-    // }).then(res => {
-    //   // console.log(res);
-    //   // 修改总条数
-    //   this.total = res.data.total;
-    //   // 总数据
-    //   this.searchFlights = res.data;
-    //   // 备份总数据
-    //   this.backupsearchFlights = { ...res.data };
-    // });
     // 请求机票列表数据
-    this.getData(to.query);
-    this.pageIndex = 1;
-    next();
+  //   this.getData(to.query);
+  //   this.pageIndex = 1;
+  //   next();
+  // },.
+  // watch一样可以监听，当$route发生变化时会执行里面的代码
+  watch: {
+    $route() {
+      this.getData(this.$route.query);
+      this.pageIndex = 1;
+    }
   },
   components: {
     FlightsHead,
