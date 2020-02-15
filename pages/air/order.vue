@@ -23,17 +23,6 @@ export default {
     },
   components: {
     OrderForm
-  },
-  mounted () {
-    //   console.log(this.$route.query);
-    this.$axios({
-        url : `/airs/${this.$route.query.id}`,
-        params : { seat_xid : this.$route.query.seat_xid}
-    }).then(res=>{
-        // console.log(res);
-        
-    })
-      
   }
 };
 </script>
