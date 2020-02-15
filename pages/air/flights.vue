@@ -45,7 +45,7 @@ import FlightsItem from "@/components/air/flightsItem";
 // 过滤条件选择部分
 import FlightsFilters from "@/components/air/flightsFilters";
 // 航班详情页得右侧历史查询部分
-import FlightsAside from '@/components/air/flightsAside'
+import FlightsAside from "@/components/air/flightsAside";
 
 export default {
   data() {
@@ -70,30 +70,31 @@ export default {
       total: 10
     };
   },
-  beforeRouteUpdate (to, from, next) {
-    // console.log(to);
-    // console.log(from);
-    // console.log(next);
-    this.$axios({
-      url: "/airs",
-      params: to.query
-    }).then(res => {
-      // console.log(res);
-      // 修改总条数
-      this.total = res.data.total;
-      // 总数据
-      this.searchFlights = res.data;
-      // 备份总数据
-      this.backupsearchFlights = {...res.data}
-    });
-    this.pageIndex = 1
-    next()
-    
-    
+  // 在当前路由改变，但是该组件被复用时调用(组件内调用导航守卫)
+  beforeRouteUpdate(to, from, next) {
     // 在当前路由改变，但是该组件被复用时调用
     // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
     // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
     // 可以访问组件实例 `this`
+    // console.log(to);
+    // console.log(from);
+    // console.log(next);
+    // this.$axios({
+    //   url: "/airs",
+    //   params: to.query
+    // }).then(res => {
+    //   // console.log(res);
+    //   // 修改总条数
+    //   this.total = res.data.total;
+    //   // 总数据
+    //   this.searchFlights = res.data;
+    //   // 备份总数据
+    //   this.backupsearchFlights = { ...res.data };
+    // });
+    // 请求机票列表数据
+    this.getData(to.query);
+    this.pageIndex = 1;
+    next();
   },
   components: {
     FlightsHead,
@@ -103,21 +104,26 @@ export default {
   },
   mounted() {
     // 请求机票列表数据
-    // console.log(this.$route.query);
-    this.$axios({
-      url: "/airs",
-      params: this.$route.query
-    }).then(res => {
-      // console.log(res);
-      // 修改总条数
-      this.total = res.data.total;
-      // 总数据
-      this.searchFlights = res.data;
-      // 备份总数据
-      this.backupsearchFlights = {...res.data}
-    });
+    this.getData(this.$route.query);
   },
   methods: {
+    // 封装请求机票列表数据
+    getData(params) {
+      // 请求机票列表数据
+      // console.log(this.$route.query);
+      this.$axios({
+        url: "/airs",
+        params
+      }).then(res => {
+        // console.log(res);
+        // 修改总条数
+        this.total = res.data.total;
+        // 总数据
+        this.searchFlights = res.data;
+        // 备份总数据
+        this.backupsearchFlights = { ...res.data };
+      });
+    },
     // 切换条数时候触发的事件
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
