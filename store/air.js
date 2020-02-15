@@ -1,3 +1,17 @@
+// 保存搜索航班的历史
+export const state = ()=>{
+    return {
+        searchHistoryList : []
+    }
+}
+
+// 修改搜索航班历史的
+export const mutations = {
+    searchHistory(state,data){
+        state.searchHistoryList.push(data)
+    }
+}
+
 export const actions = {
     // 输入搜索城市名字请求
     searchCity(store, params) {

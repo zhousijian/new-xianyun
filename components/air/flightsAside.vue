@@ -20,11 +20,15 @@
 
     <div class="history">
       <h5>历史查询</h5>
-      <nuxt-link to="#">
+      <nuxt-link
+        :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
+        v-for="(item,index) in $store.state.air.searchHistoryList"
+        :key="index"
+      >
         <el-row type="flex" justify="space-between" align="middle" class="history-item">
           <div class="air-info">
-            <div class="to-from">广州 - 上海</div>
-            <p>2019-06-16</p>
+            <div class="to-from">{{item.departCity}} - {{item.destCity}}</div>
+            <p>{{item.departDate}}</p>
           </div>
           <span>选择</span>
         </el-row>
@@ -34,7 +38,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  beforeRouteUpdate(to, from, next) {
+      console.log(to);
+      console.log(from);
+      console.log(next);
+      
+      
+      
+    // 在当前路由改变，但是该组件被复用时调用
+    // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+    // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+    // 可以访问组件实例 `this`
+  }
+};
 </script>
 
 <style scoped lang="less">

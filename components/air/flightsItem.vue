@@ -38,7 +38,7 @@
             </el-col>
             <el-col :span="5" class="price">￥{{item.par_price}}</el-col>
             <el-col :span="3" class="choose-button">
-              <el-button type="warning" size="mini">选定</el-button>
+              <el-button type="warning" size="mini" @click="selectFlightsSeat(item)">选定</el-button>
               <p>剩余：{{item.discount}}</p>
             </el-col>
           </el-row>
@@ -80,6 +80,22 @@ export default {
       return time
     }
   },
+  methods: {
+    // 选择机票座位
+    selectFlightsSeat(item){
+      // console.log(item);
+      // console.log(this.data);
+      this.$router.push({
+        path : "/air/order",
+        query : {
+          id : this.data.id,
+          seat_xid : item.seat_xid
+        }
+      })
+      
+      
+    }
+  }
 };
 </script>
 

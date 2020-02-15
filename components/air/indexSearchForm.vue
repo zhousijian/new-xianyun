@@ -203,6 +203,7 @@ export default {
           //   }).then(res => {
           //     console.log(res);
           // 跳转到 /air/flights，保证该页面url的参数有5个参数
+          this.$store.commit('air/searchHistory',this.form)
           this.$router.push({
             path: "/air/flights",
             query: this.form
