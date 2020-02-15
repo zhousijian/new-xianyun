@@ -29,9 +29,9 @@
 
     <div class="air-column">
       <h2>保险</h2>
-      <div>
+      <div v-for="(item,index) in flightsData.insurances" :key="index">
         <div class="insurance-item">
-          <el-checkbox label="航空意外险：￥30/份×1  最高赔付260万" border></el-checkbox>
+          <el-checkbox :label="`${item.type}：￥${item.price}/份×1  ${item.compensation}`" border @change="handleInsurances(item.id)"></el-checkbox>
         </div>
       </div>
     </div>
@@ -80,30 +80,65 @@ export default {
         invoice: false,
         seat_xid: this.$route.query.seat_xid,
         air: this.$route.query.id
-      }
+      },
+      // 选择机票返回的数据
+      flightsData: {}
     };
   },
   methods: {
     // 添加乘机人
     handleAddUsers() {
-        this.form.users.push({
-            username : '',
-            id : ''
-        })
+      this.form.users.push({
+        username: "",
+        id: ""
+      });
     },
 
     // 移除乘机人
     handleDeleteUser(index) {
-        this.form.users.splice(index,1)
+      this.form.users.splice(index, 1);
+    },
+
+    // 勾选或者取消勾选保险
+    handleInsurances(id){
+        let index = this.form.insurances.indexOf(id)
+        if(index == -1){
+        this.form.insurances.push(id)
+        }else {
+            this.form.insurances.splice(index,1)
+        }
     },
 
     // 发送手机验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+        if(!this.form.contactPhone){
+            return
+        }
+        this.$store.dispatch('user/captchas',{tel : this.form.contactPhone})
+        .then(res=>{
+            // console.log(res.data);
+            this.$message.success('验证码请求成功：'+res.data.code)
+            this.form.captcha = res.data.code
+            
+        })
+    },
 
     // 提交订单
     handleSubmit() {
       console.log(this.form);
+
     }
+  },
+  mounted() {
+    // 选择机票的请求
+    //   console.log(this.$route.query);
+    this.$axios({
+      url: `/airs/${this.$route.query.id}`,
+      params: { seat_xid: this.$route.query.seat_xid }
+    }).then(res => {
+      //   console.log(res);
+      this.flightsData = res.data;
+    });
   }
 };
 </script>
