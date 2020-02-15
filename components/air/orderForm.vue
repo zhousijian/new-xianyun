@@ -186,15 +186,17 @@ export default {
       });
       if (!valid) return;
 
-        // 发送提交机票订单的请求
-        this.$axios({
-            method : 'post',
-            url : '/airorders',
-            data : this.form,
-            headers :  {Authorization : 'Bearer ' + [this.$store.state.user.userInfo.token]}
-        }).then(res=>{
-            console.log(res);
-        })
+      // 发送提交机票订单的请求
+      this.$axios({
+        method: "post",
+        url: "/airorders",
+        data: this.form,
+        headers: {
+          Authorization: "Bearer " + [this.$store.state.user.userInfo.token]
+        }
+      }).then(res => {
+        console.log(res);
+      });
     }
   },
   mounted() {
