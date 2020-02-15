@@ -31,7 +31,11 @@
       <h2>保险</h2>
       <div v-for="(item,index) in flightsData.insurances" :key="index">
         <div class="insurance-item">
-          <el-checkbox :label="`${item.type}：￥${item.price}/份×1  ${item.compensation}`" border @change="handleInsurances(item.id)"></el-checkbox>
+          <el-checkbox
+            :label="`${item.type}：￥${item.price}/份×1  ${item.compensation}`"
+            border
+            @change="handleInsurances(item.id)"
+          ></el-checkbox>
         </div>
       </div>
     </div>
@@ -100,33 +104,97 @@ export default {
     },
 
     // 勾选或者取消勾选保险
-    handleInsurances(id){
-        let index = this.form.insurances.indexOf(id)
-        if(index == -1){
-        this.form.insurances.push(id)
-        }else {
-            this.form.insurances.splice(index,1)
-        }
+    handleInsurances(id) {
+      let index = this.form.insurances.indexOf(id);
+      if (index == -1) {
+        this.form.insurances.push(id);
+      } else {
+        this.form.insurances.splice(index, 1);
+      }
     },
 
     // 发送手机验证码
     handleSendCaptcha() {
-        if(!this.form.contactPhone){
-            return
-        }
-        this.$store.dispatch('user/captchas',{tel : this.form.contactPhone})
-        .then(res=>{
-            // console.log(res.data);
-            this.$message.success('验证码请求成功：'+res.data.code)
-            this.form.captcha = res.data.code
-            
-        })
+      if (!this.form.contactPhone) {
+        return;
+      }
+      this.$store
+        .dispatch("user/captchas", { tel: this.form.contactPhone })
+        .then(res => {
+          // console.log(res.data);
+          this.$message.success("验证码请求成功：" + res.data.code);
+          this.form.captcha = res.data.code;
+        });
     },
 
     // 提交订单
     handleSubmit() {
-      console.log(this.form);
+      //   console.log(this.form);
+      // 自定义表单的验证
+      const rules = {
+        // 校验用户列表
+        users: {
+          errMessage: "乘机人信息不能为空",
+          // 校验的函数，该函数返回值时布尔值，true证明验证通过，false就是验证失败
+          validator: () => {
+            // 假设检验的结果全为true
+            let valid = true;
+            this.form.users.forEach(v => {
+              // 只要有一个属性的值空的话表单不通过
+              if (!v.username || !v.id) {
+                valid = false;
+              }
+            });
+            return valid;
+          }
+        },
+        // 校验联系人姓名
+        contactName: {
+          errMessage: "姓名不能为空",
+          validator: () => {
+            return !!this.form.contactName;
+          }
+        },
+        // 校验联系人手机号码
+        contactPhone: {
+          errMessage: "手机号码不能为空",
+          validator: () => {
+            return !!this.form.contactPhone;
+          }
+        },
+        // 校验验证码
+        captcha: {
+          errMessage: "验证码不能为空",
+          validator: () => {
+            return !!this.form.captcha;
+          }
+        }
+      };
 
+      // 循环rules对象调用validator方法实现校验
+      // console.log(Object.keys(rules))
+      // 假设所有的校验都是通过的
+      let valid = true;
+      Object.keys(rules).forEach(v => {
+        // 如果已经有字段校验不通过，就不用继续判断了
+        if (!valid) return;
+        // 执行每个字段下的validator函数
+        valid = rules[v].validator();
+        if (!valid) {
+          this.$message.error(rules[v].errMessage);
+        }
+      });
+      if (!valid) return;
+
+        // 发送提交机票订单的请求
+        this.$axios({
+            method : 'post',
+            url : '/airorders',
+            data : this.form,
+            headers :  {Authorization : 'Bearer ' + [this.$store.state.user.userInfo.token]}
+        }).then(res=>{
+            console.log(res);
+        })
     }
   },
   mounted() {
