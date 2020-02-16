@@ -8,7 +8,10 @@ export const state = ()=>{
 // 修改搜索航班历史的
 export const mutations = {
     searchHistory(state,data){
-        state.searchHistoryList.push(data)
+        state.searchHistoryList.unshift(data)
+        if(state.searchHistoryList.length > 5) {
+            state.searchHistoryList.length = 5
+        }
     }
 }
 
