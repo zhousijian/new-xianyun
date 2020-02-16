@@ -7,14 +7,18 @@
       </div>
 
       <!-- 侧边栏 -->
-      <div class="aside"></div>
+      <div class="aside">
+        <OrderAside></OrderAside>
+      </div>
     </el-row>
   </div>
 </template>
 
 <script>
-//
+// 引入表单组件
 import OrderForm from "@/components/air/orderForm";
+// 引入侧边栏的金额计算组件
+import OrderAside from '@/components/air/orderAside'
 export default {
     data () {
         return {
@@ -22,7 +26,8 @@ export default {
         }
     },
   components: {
-    OrderForm
+    OrderForm,
+    OrderAside
   }
 };
 </script>
