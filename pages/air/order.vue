@@ -8,7 +8,7 @@
 
       <!-- 侧边栏 -->
       <div class="aside">
-        <OrderAside></OrderAside>
+        <OrderAside :data="$store.state.air.orderDetailInfo"></OrderAside>
       </div>
     </el-row>
   </div>
@@ -18,13 +18,11 @@
 // 引入表单组件
 import OrderForm from "@/components/air/orderForm";
 // 引入侧边栏的金额计算组件
-import OrderAside from '@/components/air/orderAside'
+import OrderAside from "@/components/air/orderAside";
 export default {
-    data () {
-        return {
-            
-        }
-    },
+  data() {
+    return {};
+  },
   components: {
     OrderForm,
     OrderAside

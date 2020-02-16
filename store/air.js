@@ -1,17 +1,34 @@
-// 保存搜索航班的历史
-export const state = ()=>{
+
+export const state = () => {
     return {
-        searchHistoryList : []
+        // 保存搜索航班的历史
+        searchHistoryList: [],
+        // 保存订单的详情信息
+        orderDetailInfo : {
+            seat_infos : {},
+            insurances : []
+        },
+        // 保存订单的总金额
+        price : ''
     }
 }
 
-// 修改搜索航班历史的
+
 export const mutations = {
-    searchHistory(state,data){
+    // 修改搜索航班历史的
+    searchHistory(state, data) {
         state.searchHistoryList.unshift(data)
-        if(state.searchHistoryList.length > 5) {
+        if (state.searchHistoryList.length > 5) {
             state.searchHistoryList.length = 5
         }
+    },
+    // 修改订单的详情信息
+    orderDetail(state,data){
+        state.orderDetailInfo = data
+    },
+    // 修改订单的总金额
+    totalPrice(state,data){
+        state.price = data
     }
 }
 
@@ -22,8 +39,8 @@ export const actions = {
             url: '/airs/city',
             params
         }).then(res => {
-            res.data.data = res.data.data.map(value=>{
-                value.value = value.name.replace('市','')
+            res.data.data = res.data.data.map(value => {
+                value.value = value.name.replace('市', '')
                 return value
             })
             return res.data.data

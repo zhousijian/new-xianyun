@@ -63,6 +63,7 @@
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
+    <span>{{totalPrice}}</span>
   </div>
 </template>
 
@@ -86,7 +87,10 @@ export default {
         air: this.$route.query.id
       },
       // 选择机票返回的数据
-      flightsData: {}
+      flightsData: {
+        seat_infos : {},
+        insurances : []
+      }
     };
   },
   methods: {
@@ -187,6 +191,7 @@ export default {
       if (!valid) return;
 
       // 发送提交机票订单的请求
+      // console.log(this.form);
       this.$axios({
         method: "post",
         url: "/airorders",
@@ -199,6 +204,20 @@ export default {
       });
     }
   },
+  computed: {
+    totalPrice(){
+      // console.log(this.flightsData);
+      let price = this.flightsData.seat_infos.par_price+50
+      this.flightsData.insurances.forEach(v=>{
+        if(this.form.insurances.indexOf(v.id) != -1){
+          price += v.price
+        }
+      })
+      price *= this.form.users.length
+      this.$store.commit('air/totalPrice',price)
+      return ''
+    }
+  },
   mounted() {
     // 选择机票的请求
     //   console.log(this.$route.query);
@@ -206,8 +225,9 @@ export default {
       url: `/airs/${this.$route.query.id}`,
       params: { seat_xid: this.$route.query.seat_xid }
     }).then(res => {
-      //   console.log(res);
+        // console.log(res);
       this.flightsData = res.data;
+      this.$store.commit('air/orderDetail',this.flightsData)
     });
   }
 };

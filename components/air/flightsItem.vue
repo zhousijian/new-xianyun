@@ -83,7 +83,7 @@ export default {
   methods: {
     // 选择机票座位
     selectFlightsSeat(item){
-      // console.log(item);
+      console.log(item);
       // console.log(this.data);
       this.$router.push({
         path : "/air/order",

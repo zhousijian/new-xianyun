@@ -37,7 +37,7 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-bar">
       <span>应付总额：</span>
-      <span class="price">￥</span>
+      <span class="price">￥{{$store.state.air.price}}</span>
     </el-row>
   </div>
 </template>
@@ -48,11 +48,10 @@ export default {
     data: {
       type: Object,
       default: {
-        seat_infos: {}
+          seat_infos : {}
       }
     }
   },
-
   computed: {
     rankTime() {
       // 数据还未请求回来
