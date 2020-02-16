@@ -15,6 +15,14 @@ export default (data)=>{
             // 使用element-ui组件提示错误
             Message.error(message)
         }
+
+        if(statusCode == 401 || statusCode == 403){
+            // console.log(data);
+            data.redirect(200,'/user/login',{
+                returnUrl : data.route.fullPath
+            })
+            
+        }
         
     })
 }

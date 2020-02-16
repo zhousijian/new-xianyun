@@ -48,7 +48,8 @@ export default {
           // 通过commit调用actions中的方法
           this.$store.dispatch("user/login", this.userInfo).then(() => {
             this.$message.success("登录成功");
-            this.$router.push("/");
+            // this.$router.push("/");
+            this.$router.replace(this.$route.query.returnUrl || '/')
           });
         } else {
           this.$message.error("请正确输入账号或密码");
