@@ -24,26 +24,36 @@
 </template>
 
 <script>
+// 引入生成二维码的插件
+import QRCode from "qrcode";
+
 export default {
-    data () {
-        return {
-            orderInfo : {}
-        }
-    },
+  data() {
+    return {
+      orderInfo: {
+        payInfo: {}
+      }
+    };
+  },
   mounted() {
-      // 定时器作用是延迟了代码的执行，以免报错。
-      //（如果不使用定时器，在发送请求时候拿不到仓库里的token）
-      // 定时器延迟时间为0的作用是时间上没有延迟，但执行的时机是在所有组件加载完成才执行
+    // 定时器作用是延迟了代码的执行，以免报错。
+    //（如果不使用定时器，在发送请求时候拿不到仓库里的token）
+    // 定时器延迟时间为0的作用是时间上没有延迟，但执行的时机是在所有组件加载完成才执行
     setTimeout(() => {
-        // 发送订单详情的请求
+      // 发送订单详情的请求
       this.$axios({
         url: `/airorders/${this.$route.query.id}`,
         headers: {
           Authorization: "Bearer " + [this.$store.state.user.userInfo.token]
         }
       }).then(res => {
-        console.log(res);
-        this.orderInfo = res.data
+        // console.log(res);
+        this.orderInfo = res.data;
+        // 生成二维码
+        let canvas = document.getElementById("qrcode-stage");
+        QRCode.toCanvas(canvas, this.orderInfo.payInfo.code_url,{
+            width : 200
+        });
       });
     }, 0);
   }
