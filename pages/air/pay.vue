@@ -30,9 +30,10 @@ import QRCode from "qrcode";
 export default {
   data() {
     return {
-      orderInfo: {
-        payInfo: {}
-      }
+      // 订单详情
+      orderInfo: {},
+      // 定时器
+      pay: ""
     };
   },
   mounted() {
@@ -51,11 +52,47 @@ export default {
         this.orderInfo = res.data;
         // 生成二维码
         let canvas = document.getElementById("qrcode-stage");
-        QRCode.toCanvas(canvas, this.orderInfo.payInfo.code_url,{
-            width : 200
+        QRCode.toCanvas(canvas, this.orderInfo.payInfo.code_url, {
+          width: 200
         });
+
+        // 需要检测到用户有没有支付，所以需要每隔一段时间都需要发一次请求
+        this.pay = setInterval(() => {
+          this.payState();
+        }, 3000);
       });
     }, 0);
+  },
+  // 组件销毁时触发的钩子函数
+  destroyed () {
+      clearInterval(this.pay)
+  },
+  methods: {
+    // 查询支付状态
+    payState() {
+      this.$axios({
+        method: "post",
+        url: "/airorders/checkpay",
+        data: {
+          id: this.orderInfo.id,
+          nonce_str: this.orderInfo.price,
+          out_trade_no: this.orderInfo.orderNo
+        },
+        headers: {
+          Authorization: "Bearer " + [this.$store.state.user.userInfo.token]
+        }
+      }).then(res => {
+        // console.log(res);
+        // 当支付状态为支付成功就停止定时器
+        if (res.data.statusTxt == "支付完成") {
+          clearInterval(this.pay);
+          this.$alert("支付成功", "温馨提示", {
+            confirmButtonText: "确定",
+            type : 'success'
+          });
+        }
+      });
+    }
   }
 };
 </script>
