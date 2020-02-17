@@ -200,7 +200,16 @@ export default {
           Authorization: "Bearer " + [this.$store.state.user.userInfo.token]
         }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
+        this.$message.success(res.data.message+'，稍后为您跳转支付页面')
+        setTimeout(() => {
+          this.$router.push({
+          path : '/air/pay',
+          query : {
+            id : res.data.data.id
+          }
+        })
+        }, 1500);
       });
     }
   },
